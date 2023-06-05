@@ -97,15 +97,34 @@ simonherrmann@MBP-von-Simon exeRcise-sheet-3 % git commit -m "Exercise 1e"
 
 For this task you will upload your solution to GitHub.
 
-a)  Create a new repository on GitHub in your account named
+### Exercise 2a) 
+
+**Task:** Create a new repository on GitHub in your account named
     `exeRcise-sheet-3`. Make sure you create a **public repository** so
     we are able to see it for grading. Add the link to the repository
     below:
-b)  Push your code to this new repository by copying and executing the
+    
+**Link:** https://github.com/SimonAtLMU/exeRcise-sheet-3
+
+### Exercise 2b) 
+
+**Task:** Push your code to this new repository by copying and executing the
     snippet on github listed under
     `…or push an existing repository from the command line`.
-c)  Regularly push your latest changes to GitHub again and especially do
+    
+````markdown
+simonherrmann@MBP-von-Simon exeRcise-sheet-3 % git remote add origin git@github.com:SimonAtLMU/exeRcise-sheet-3.git
+git branch -M main
+git push -u origin main
+````
+
+Then, I successfully inserted my passphrase for the private SSH key
+
+### Exercise 2c) 
+
+**Task:** Regularly push your latest changes to GitHub again and especially do
     so when you are finished with this sheet.
+    
 
 ## Exercise 3: Baby-Names in Munich (4.5 Points)
 
