@@ -134,14 +134,55 @@ open data repository of the city of Munich for the years `2022` and
 
 Link: <https://opendata.muenchen.de/dataset/vornamen-von-neugeborenen>
 
-a)  Download the data for both years and track it in git. For small
-    datasets like these adding them to git is not a problem.
+### Exercise 3a)
 
-b)  Load the data for both years into R. Check the type of the count
+**Task:** Download the data for both years and track it in git. For small
+    datasets like these adding them to git is not a problem.
+    
+I downloaded the data and inserted them in a new folder called *data*
+
+````markdown
+git add data
+git commit -m "Added new dataframes"
+````
+
+### Exercise 3b)
+
+**Task:** Load the data for both years into R. Check the type of the count
     variable ("Anzahl") and look into the data to determine why it is
     not numeric? Fix the problem in an appropriate manner, it is OK if
     some of the counts are inaccurate because of this. Explain your
     solution and the repercussions.
+    
+```{r message=FALSE, warning=FALSE}
+#assign the downloaded df to objects
+names21 <- read.csv(file.path("data", "vornamen_2021.csv"))
+
+names22 <- read.csv(file.path("data", "open_data_portal_2022.csv"))
+
+#check type of "Anzahl"-variables
+c(typeof(names21$Anzahl), typeof(names22$Anzahl))
+
+#Make "Anzahl"-variables numeric; solution for "4 oder weniger"
+library(tidyverse)
+
+#df for 2022
+names22 <- names22 %>% 
+  mutate(Anzahl = as.character(Anzahl)) %>% 
+  rowwise() %>% 
+  mutate(Anzahl = if_else(Anzahl == "4 oder weniger", as.character(runif(1, min = 0, max = 4)), Anzahl)) %>% #generate random normal-distributed values for "4 oder weniger
+  ungroup()
+
+#df for 2021
+names21 <- names21 %>% 
+  mutate(Anzahl = as.character(Anzahl)) %>% 
+  rowwise() %>% 
+  mutate(Anzahl = if_else(Anzahl == "4 oder weniger", as.character(runif(1, min = 0, max = 4)), Anzahl)) %>% #generate random normal-distributed values for "4 oder weniger
+  ungroup()
+```
+    
+**Explanation of solution:** First of all, I realised that the values in the column "Anzahl" have the value of *character*. Based on the task explanation, I assumed that these values should be converted to a numeric type. Since the values "4 oder weniger" could be everything between 0 and 4, I replaced these values with random normal distributed values between 0 and 4 (specified with the function runif(1, min = 0, max = 4)). In my opinion, this is the best way to deal with the uncertainty as to which values are actually behind "4 oder weniger". To get a random value for each row, I needed to use the rowwise-function.
+
 
 c)  Calculate the total number of babies born in Munich in 2022
     and 2021. Which year had the bigger baby-boom?
