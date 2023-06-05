@@ -85,7 +85,13 @@ Before starting with the next exercises, I copied the Exercise sheet #3 into the
     generated when knitting the sheet e.g. the HTML page. Ignore these
     files, as we only want to track the source files themselves.
     
-
+First, I added the file *ExerciseSheet_3_Herrmann.html* to the .gitignore-file
+    
+````markdown
+simonherrmann@MBP-von-Simon exeRcise-sheet-3 % git add ExerciseSheet_3_Herrmann.Rmd
+simonherrmann@MBP-von-Simon exeRcise-sheet-3 % git add .gitignore
+simonherrmann@MBP-von-Simon exeRcise-sheet-3 % git commit -m "Exercise 1e"
+````
 
 ## Exercise 2: Putting your Repository on GitHub (3.5 Points)
 
