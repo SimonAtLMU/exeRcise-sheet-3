@@ -166,35 +166,79 @@ c(typeof(names21$Anzahl), typeof(names22$Anzahl))
 #Make "Anzahl"-variables numeric; solution for "4 oder weniger"
 library(tidyverse)
 
-#df for 2022
-names22 <- names22 %>% 
-  mutate(Anzahl = as.character(Anzahl)) %>% 
-  rowwise() %>% 
-  mutate(Anzahl = if_else(Anzahl == "4 oder weniger", as.character(runif(1, min = 0, max = 4)), Anzahl)) %>% #generate random normal-distributed values for "4 oder weniger
-  ungroup()
-
 #df for 2021
 names21 <- names21 %>% 
-  mutate(Anzahl = as.character(Anzahl)) %>% 
+  rowwise() %>% 
+  mutate(Anzahl = if_else(Anzahl == "4 oder weniger", as.character(runif(1, min = 0, max = 4)), Anzahl)) %>% #generate random values for "4 oder weniger
+  ungroup() %>% 
+  mutate(Anzahl = as.numeric(Anzahl))
+
+#df for 2022
+names22 <- names22 %>% 
   rowwise() %>% 
   mutate(Anzahl = if_else(Anzahl == "4 oder weniger", as.character(runif(1, min = 0, max = 4)), Anzahl)) %>% #generate random normal-distributed values for "4 oder weniger
-  ungroup()
+  ungroup() %>% 
+  mutate(Anzahl = as.numeric(Anzahl))
+
 ```
     
-**Explanation of solution:** First of all, I realised that the values in the column "Anzahl" have the value of *character*. Based on the task explanation, I assumed that these values should be converted to a numeric type. Since the values "4 oder weniger" could be everything between 0 and 4, I replaced these values with random normal distributed values between 0 and 4 (specified with the function runif(1, min = 0, max = 4)). In my opinion, this is the best way to deal with the uncertainty as to which values are actually behind "4 oder weniger". To get a random value for each row, I needed to use the rowwise-function.
+**Explanation of solution:** First of all, I realised that the values in the column "Anzahl" have the value of *character*. Based on the task explanation, I assumed that these values should be converted to a numeric type. Since the values "4 oder weniger" could be everything between 0 and 4, I replaced these values with random values between 0 and 4 (specified with the function runif(1, min = 0, max = 4)). In my opinion, this is the best way to deal with the uncertainty as to which values are actually behind "4 oder weniger". To get a random value for each row, I needed to use the rowwise-function.
 
+### Exercise 3c) 
 
-c)  Calculate the total number of babies born in Munich in 2022
+**Task:** Calculate the total number of babies born in Munich in 2022
     and 2021. Which year had the bigger baby-boom?
+    
+```{r}
 
-d)  Add a new column `year` to both datasets which holds the correct
+births_total_22 <- sum(names22$Anzahl)
+
+births_total_21 <- sum(names21$Anzahl)
+
+data.frame(Jahr = c("2021", "2022"), Anzahl = c(births_total_21, births_total_22)) %>% 
+  slice_max(Anzahl)
+
+```
+
+**Answer:** Under the assumptions of 2b) **2021** had the bigger baby boom. 
+
+### Exercise 3d) 
+
+**Task:** Add a new column `year` to both datasets which holds the correct
     year for each.
 
-e)  Combine both datasets into one using `bind_rows()`.
+```{r}
+names21 <- names21 %>% 
+  mutate(year = 2021)
 
-f)  Combine the counts for same names to determine the most popular
+names22 <- names22 %>% 
+  mutate(year = 2022)
+```
+
+### Exercise 3e) 
+
+**Task:** Combine both datasets into one using `bind_rows()`.
+
+```{r}
+names_total <- bind_rows(names21, names22)
+```
+
+### Exercise 3f)
+
+**Task:** Combine the counts for same names to determine the most popular
     names across both years. Print out the top 10 names in a nicely
     formatted table for both years. Include a table caption.
+    
+```{r}
+names_n <- names_total %>% 
+  group_by(Vorname) %>%
+  summarise(Häufigkeit = sum(Anzahl)) %>% 
+  slice_max(order_by = Häufigkeit, n = 10)
+
+knitr::kable(names_n, format = "html") %>% 
+  kableExtra::kable_styling()
+```
+
 
 ## Exercise 4: Chat GPT + apply (3 points)
 
